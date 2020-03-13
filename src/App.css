@@ -1,0 +1,22 @@
+* {
+  font-family: inherit;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 100%;
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+  margin: 0;
+  top: 0;
+}
+
+.layout {
+  height: 100%;
+}
+
+.layout .react-resizable-handle {
+  bottom: -20px;
+}
