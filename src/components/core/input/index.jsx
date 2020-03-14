@@ -14,6 +14,7 @@ const StyledInput = styled.input`
   height: 100%;
   border: 1px solid #d5d5d5;
   border-radius: 0.25rem;
+  padding: 0.5rem;
 `;
 
 const StyledFieldControlsContainer = styled.div`
@@ -29,15 +30,14 @@ const StyledLabel = styled.label`
 `;
 
 const Input = (props) => {
-  console.log(props);
   return (
     <>
       {props.configurable && <StyledLabel>Input</StyledLabel>}
       <StyledInputContainer>
-        <StyledInput disabled={props.configurable} />
+        <StyledInput value={props.value} disabled={props.configurable} onChange={props.onChange} />
         {props.configurable && (
           <StyledFieldControlsContainer>
-            <FieldControls onDelete={props.onDeleteField} />
+            <FieldControls onEdit={props.onEditField} onDelete={props.onDeleteField} />
           </StyledFieldControlsContainer>
         )}
       </StyledInputContainer>

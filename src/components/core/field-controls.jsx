@@ -39,8 +39,10 @@ const StyledFieldControl = styled.div`
 
 const FieldControls = (props) => {
   const onClickHandlers = {
-    delete: props.onDelete
+    delete: props.onDelete,
+    edit: props.onEdit
   };
+
   return (
     <StyledFieldControl>
       {controls.map(ctrl => (

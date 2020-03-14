@@ -31,6 +31,7 @@ const getBackgroundColor = (props) => {
 const Button = styled.button`
   display: flex;
   align-items: center;
+  margin: 0.25rem;
   padding: 0.25rem 0.5rem;
   height: 2rem;
   font-size: 1em;
