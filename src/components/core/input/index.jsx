@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { bool, func, string } from 'prop-types';
 
 import FieldControls from '../field-controls';
 
@@ -30,19 +31,41 @@ const StyledLabel = styled.label`
 `;
 
 const Input = (props) => {
+  const {
+    configurable,
+    label,
+    onChange,
+    onDeleteField,
+    onEditField,
+    value
+  } = props;
+
+  const inputLabel = configurable
+    ? 'Input'
+    : label;
+
   return (
     <>
-      {props.configurable && <StyledLabel>Input</StyledLabel>}
+      {inputLabel && <StyledLabel>{inputLabel}</StyledLabel>}
       <StyledInputContainer>
-        <StyledInput value={props.value} disabled={props.configurable} onChange={props.onChange} />
-        {props.configurable && (
+        <StyledInput value={value} disabled={configurable} onChange={onChange} />
+        {configurable && (
           <StyledFieldControlsContainer>
-            <FieldControls onEdit={props.onEditField} onDelete={props.onDeleteField} />
+            <FieldControls onEdit={onEditField} onDelete={onDeleteField} />
           </StyledFieldControlsContainer>
         )}
       </StyledInputContainer>
     </>
   );
 }
+
+Input.propTypes = {
+  configurable: bool,
+  label: string,
+  onChange: func,
+  onDeleteField: func,
+  onEditField: func,
+  value: string
+};
 
 export default Input;

@@ -1,12 +1,8 @@
 import { CHANGE_PAGE } from '../constants/actions';
 
-const page = (state = {}, action) => {
+const page = (state = 'create', action) => {
   switch(action.type) {
-    case CHANGE_PAGE: return {
-      ...state,
-      page: action.page
-    };
-
+    case CHANGE_PAGE: return action.page;
     default: return state;
   }
 }

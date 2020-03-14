@@ -1,5 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
+import { arrayOf, func, shape, string } from 'prop-types';
+
 import IconButton from '../core/buttons/icon-button';
 
 const SectionHeader = styled.div`
@@ -38,5 +40,14 @@ const ControlSection = ({name, controls, onDragStart}) => (
     ))}
   </StyledControlSection>
 );
+
+ControlSection.propTypes = {
+  controls: arrayOf(shape({
+    id: string,
+    name: string
+  })).isRequired,
+  name: string.isRequired,
+  onDragStart: func.isRequired
+};
 
 export default ControlSection;

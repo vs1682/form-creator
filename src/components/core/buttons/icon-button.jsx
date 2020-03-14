@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { node, string } from 'prop-types';
 
 import Button from './button';
 
@@ -23,5 +24,11 @@ const IconButton = ({
     {children}
   </StyledButton>
 );
+
+IconButton.propTypes = {
+  children: node.isRequired,
+  color: string,
+  iconClass: string.isRequired
+};
 
 export default IconButton;

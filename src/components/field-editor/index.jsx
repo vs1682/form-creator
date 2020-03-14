@@ -69,24 +69,29 @@ class FieldEditor extends Component {
 
   render() {
     const { name, label } = this.state;
+    const { children, staticField, title } = this.props;
 
     return (
       <StyledFieldEditorContainer>
-        <StyledHeader>{this.props.title}</StyledHeader>
+        <StyledHeader>{title}</StyledHeader>
         <StyledSettingsContainer>
-          <StyledSingleSettingContainer>
-            <div>Name</div>
-            <StyledInputContainer>
-              <Input value={name} onChange={e => this.onChangeInput(e.target.value, 'name')} />
-            </StyledInputContainer>
-          </StyledSingleSettingContainer>
-          <StyledSingleSettingContainer>
-            <div>Label</div>
-            <StyledInputContainer>
-            <Input value={label} onChange={e => this.onChangeInput(e.target.value, 'label')} />
-            </StyledInputContainer>
-          </StyledSingleSettingContainer>
-          {this.props.children}
+        {!staticField && (
+          <>
+            <StyledSingleSettingContainer>
+              <div>Name</div>
+              <StyledInputContainer>
+                <Input value={name} onChange={e => this.onChangeInput(e.target.value, 'name')} />
+              </StyledInputContainer>
+            </StyledSingleSettingContainer>
+            <StyledSingleSettingContainer>
+              <div>Label</div>
+              <StyledInputContainer>
+              <Input value={label} onChange={e => this.onChangeInput(e.target.value, 'label')} />
+              </StyledInputContainer>
+            </StyledSingleSettingContainer>
+          </>
+        )}
+          {children}
         </StyledSettingsContainer>
         <StyledBtnControlContainers>
           <Button onClick={this.onCancel} >Cancel</Button>

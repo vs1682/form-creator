@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { bool, func, string } from 'prop-types';
 
 import FieldControls from './field-controls';
 
@@ -17,25 +18,41 @@ const StyledLabel = styled.label`
 
 const StyledFileContainer = styled.div`
   width: 100%;
-  border: 1px dashed #d5d5d5;
+  border: ${props => props.configurable ? '1px dashed #d5d5d5' : 'none'};
 `;
 
-const onChange = e => {
-  console.log(e);
+const FileUploader = ({
+  configurable,
+  label,
+  onChange,
+  onDeleteField,
+  onEditField,
+  value
+}) => {
+  const uploaderLabel = configurable
+  ? 'File Uploader'
+  : label;
+
+  return (
+    <>
+      {uploaderLabel && <StyledLabel>{uploaderLabel}</StyledLabel>}
+      <StyledFileContainer configurable={configurable}>
+        <input type="file" value={value} onChange={onChange} disabled={configurable} />
+        {configurable && (
+          <StyledFieldControlsContainer>
+            <FieldControls onEdit={onEditField} onDelete={onDeleteField} />
+          </StyledFieldControlsContainer>
+        )}
+      </StyledFileContainer>
+    </>
+  );
 }
 
-const Divider = (props) => (
-  <>
-    {props.configurable && <StyledLabel>File Uploader</StyledLabel>}
-    <StyledFileContainer>
-      <input type="file" onChange={onChange} disabled={props.configurable} />
-      {props.configurable && (
-        <StyledFieldControlsContainer>
-          <FieldControls onDelete={props.onDeleteField} />
-        </StyledFieldControlsContainer>
-      )}
-    </StyledFileContainer>
-  </>
-);
+FileUploader.propTypes = {
+  configurable: bool,
+  label: string,
+  onDeleteField: func,
+  value: string
+};
 
-export default Divider;
+export default FileUploader;

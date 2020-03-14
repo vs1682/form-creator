@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { func } from 'prop-types';
 
 const controls = [
   {
@@ -56,5 +57,10 @@ const FieldControls = (props) => {
     </StyledFieldControl>
   );
 }
+
+FieldControls.propTypes = {
+  onDelete: func,
+  onEdit: func
+};
 
 export default FieldControls;

@@ -16,7 +16,3 @@ body {
 .layout {
   height: 100%;
 }
-
-.layout .react-resizable-handle {
-  bottom: -20px;
-}

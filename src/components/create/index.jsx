@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { func } from 'prop-types';
 import styled from 'styled-components';
 import GridLayout, { WidthProvider } from 'react-grid-layout';
 
 import { saveForm } from '../../actions/forms';
+import { changePage } from '../../actions/page';
 
 import FieldEditor from '../field-editor/index';
 import FieldTextEditor from '../field-editor/field-text-editor';
@@ -28,11 +30,6 @@ const formControls = [
   {
     id: 'input',
     name: 'Input',
-    iconClass: 'arrows-alt'
-  },
-  {
-    id: 'checkbox',
-    name: 'Checkbox',
     iconClass: 'arrows-alt'
   },
   {
@@ -72,6 +69,12 @@ const GridContainer = styled.div`
   padding: 2.5rem;
 `;
 
+const StyledFieldContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+`;
+
 const StyledButtonContainer = styled.div`
   margin: 0 auto;
   width: 120px;
@@ -105,8 +108,9 @@ const FieldEditors = {
   table: null
 };
 
-const resizableFieldTypes = ['input'];
-const updatableFieldTypes = ['text'];
+const resizableFieldTypes = ['input', 'divider'];
+
+const staticFieldTypes = ['text', 'divider'];
 
 class CreateForm extends Component {
   constructor(props) {
@@ -162,9 +166,12 @@ class CreateForm extends Component {
       const fieldData = {
         id: formId + '-field-' + currentFieldType + '-' + Date.now(),
         type: currentFieldType,
-        name: currentFieldType + Date.now(),
-        label: currentFieldType
       };
+
+      if (!staticFieldTypes.includes(currentFieldType)) {
+        fieldData.name = currentFieldType + Date.now();
+        fieldData.label = currentFieldType;
+      }
 
       if (currentFieldType === 'text') {
         fieldData.text = 'This is some random text. Please edit it through the editor';
@@ -238,10 +245,16 @@ class CreateForm extends Component {
   onSaveForm = () => {
     const {id, formElements} = this.state;
 
-    this.props.saveForm({
-      id,
-      fields: formElements
-    });
+    if (Object.keys(formElements).length) {
+      this.props.saveForm({
+        id,
+        fields: formElements
+      });
+  
+      this.props.changePage('preview');
+    } else {
+      alert ('Please add some fields in the editor.');
+    }
   }
 
   getFormElements = () => {
@@ -253,11 +266,6 @@ class CreateForm extends Component {
         label,
         text
       } = formElement;
-      const fieldData = {
-        name,
-        label,
-        text
-      };
       const Field = Fields[currentFieldType];
 
       if (!!Field) {
@@ -266,7 +274,7 @@ class CreateForm extends Component {
           x: 0,
           y: Infinity,
           w: 12,
-          h: 2
+          h: 1
         };
 
         // check if the field is resizable
@@ -275,18 +283,18 @@ class CreateForm extends Component {
         }
         
         allFields.push(
-          <div
+          <StyledFieldContainer
             key={currentFieldId}
             data-grid={fieldLayoutProperties}
           >
             <Field
               configurable
               id={currentFieldId}
-              data={updatableFieldTypes.includes(currentFieldType) && fieldData}
+              text={text}
               onDeleteField={() => this.onDeleteFormElement(currentFieldId)}
               onEditField={() => this.onClickEditField(currentFieldId, currentFieldType)}
             />
-          </div>
+          </StyledFieldContainer>
         );
       }
 
@@ -312,6 +320,7 @@ class CreateForm extends Component {
       return shouldShow && (
         <StyledFieldEditorContainer>
           <FormFieldEditor
+            staticField={staticFieldTypes.includes(fieldType)}
             title={fieldType}
             fieldData={fieldData}
             onSave={this.onSaveFieldEditor}
@@ -328,10 +337,10 @@ class CreateForm extends Component {
     return (
       <Container>
         <Sidebar>
-          <IconButton shape="rounded" color="#027aff" backgroundColor="#ffffff" iconClass="sync">
+          {/* <IconButton shape="rounded" color="#027aff" backgroundColor="#ffffff" iconClass="sync">
             Validate
-          </IconButton>
-          <ControlSection name="Cell layout" controls={layoutControls} onDragStart={this.onDragControl} />
+          </IconButton> */}
+          {/* <ControlSection name="Cell layout" controls={layoutControls} onDragStart={this.onDragControl} /> */}
           <ControlSection name="Form components" controls={formControls} onDragStart={this.onDragControl} />
         </Sidebar>
         <GridContainer>
@@ -340,7 +349,7 @@ class CreateForm extends Component {
             autoSize={false}
             margin={[8, 32]}
             cols={12}
-            rowHeight={30}
+            rowHeight={48}
             isDraggable={true}
             isDroppable={true}
             onDrop={this.onDrop}
@@ -366,8 +375,14 @@ class CreateForm extends Component {
   }
 }
 
+CreateForm.propTypes = {
+  saveForm: func.isRequired,
+  changePage: func.isRequired
+};
+
 const mapDispatchToProps = {
-  saveForm
+  saveForm,
+  changePage
 };
 
 export default connect(null, mapDispatchToProps)(CreateForm);

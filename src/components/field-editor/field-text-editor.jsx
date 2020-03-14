@@ -40,10 +40,11 @@ class FieldTextEditor extends Component {
   }
 
   render() {
-    const { title, fieldData } = this.props;
+    const { title, fieldData, staticField } = this.props;
 
     return (
       <FieldEditor
+        staticField={staticField}
         title={title}
         fieldData={fieldData}
         onChangeInput={this.onChangeInput}
