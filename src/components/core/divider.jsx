@@ -30,14 +30,14 @@ const StyledDivider = styled.div`
   border-top: 1px solid #d5d5d5;
 `;
 
-const Divider = ({ configurable, onDeleteField }) => (
+const Divider = ({ configurable, onCopyField, onDeleteField }) => (
   <>
     {configurable && <StyledLabel>Divider</StyledLabel>}
     <StyledDividerContainer configurable={configurable}>
       <StyledDivider />
       {configurable && (
         <StyledFieldControlsContainer>
-          <FieldControls onDelete={onDeleteField} />
+          <FieldControls onCopy={onCopyField} onDelete={onDeleteField} />
         </StyledFieldControlsContainer>
       )}
     </StyledDividerContainer>
@@ -46,6 +46,7 @@ const Divider = ({ configurable, onDeleteField }) => (
 
 Divider.propTypes = {
   configurable: bool,
+  onCopyField: func,
   onDeleteField: func
 };
 

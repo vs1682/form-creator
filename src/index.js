@@ -6,9 +6,18 @@ import { Provider } from 'react-redux';
 import rootReducer from './reducers/index';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+import formsJson from './forms.json';
+
+const initialState = {
+  page: 'list',
+  formData: {
+    forms: formsJson
+  }
+}
 
 const store = createStore(
   rootReducer,
+  initialState,
   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 );
 

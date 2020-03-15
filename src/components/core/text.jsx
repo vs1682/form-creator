@@ -24,6 +24,7 @@ const StyledTextContainer = styled.div`
 const Text = ({
   configurable,
   text,
+  onCopyField,
   onEditField,
   onDeleteField
 }) => (
@@ -33,7 +34,7 @@ const Text = ({
       {text}
       {configurable && (
         <StyledFieldControlsContainer>
-          <FieldControls onEdit={onEditField} onDelete={onDeleteField} />
+          <FieldControls onCopy={onCopyField} onEdit={onEditField} onDelete={onDeleteField} />
         </StyledFieldControlsContainer>
       )}
     </StyledTextContainer>

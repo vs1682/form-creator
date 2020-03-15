@@ -112,6 +112,8 @@ const resizableFieldTypes = ['input', 'divider'];
 
 const staticFieldTypes = ['text', 'divider'];
 
+const nonEditableTypes = ['divider'];
+
 class CreateForm extends Component {
   constructor(props) {
     super(props);
@@ -129,6 +131,24 @@ class CreateForm extends Component {
   }
 
   dragImageRef = null;
+
+  createFieldData = (formId, fieldType) => {
+    const fieldData = {
+      id: formId + '-field-' + fieldType + '-' + Date.now(),
+      type: fieldType,
+    };
+
+    if (!staticFieldTypes.includes(fieldType)) {
+      fieldData.name = fieldType + Date.now();
+      fieldData.label = fieldType;
+    }
+
+    if (fieldType === 'text') {
+      fieldData.text = 'This is some random text. Please edit it through the editor';
+    }
+
+    return fieldData;
+  }
 
   onDragControl = (e, id) => {
     const dragImage = e.target.cloneNode(true);
@@ -153,8 +173,8 @@ class CreateForm extends Component {
     });
   }
 
-  onDrop = (e) => {
-    const { id: formId, dragging, currentFieldType, formElements } = this.state;
+  onDrop = () => {
+    const { id: formId, currentFieldType, dragging, formElements } = this.state;
     if (dragging) {
       if(this.dragImageRef) {
 
@@ -163,19 +183,7 @@ class CreateForm extends Component {
         this.dragImageRef = null;
       }
 
-      const fieldData = {
-        id: formId + '-field-' + currentFieldType + '-' + Date.now(),
-        type: currentFieldType,
-      };
-
-      if (!staticFieldTypes.includes(currentFieldType)) {
-        fieldData.name = currentFieldType + Date.now();
-        fieldData.label = currentFieldType;
-      }
-
-      if (currentFieldType === 'text') {
-        fieldData.text = 'This is some random text. Please edit it through the editor';
-      }
+      const fieldData = this.createFieldData(formId, currentFieldType);
   
       this.setState({
         formElements: {...formElements, [fieldData.id]: fieldData},
@@ -192,6 +200,17 @@ class CreateForm extends Component {
     });
 
     this.setState({ formElements });
+  }
+
+  onCopyFormElement = id => {
+    const { id: formId, formElements } = this.state;
+    const fieldType = formElements[id].type;
+
+    const fieldData = this.createFieldData(formId, fieldType);
+
+    this.setState({
+      formElements: {...formElements, [fieldData.id]: fieldData}
+    });
   }
 
   onDeleteFormElement = id => {
@@ -248,6 +267,7 @@ class CreateForm extends Component {
     if (Object.keys(formElements).length) {
       this.props.saveForm({
         id,
+        createdAt: Date.now(),
         fields: formElements
       });
   
@@ -262,8 +282,6 @@ class CreateForm extends Component {
       const {
         id: currentFieldId,
         type: currentFieldType,
-        name,
-        label,
         text
       } = formElement;
       const Field = Fields[currentFieldType];
@@ -291,8 +309,9 @@ class CreateForm extends Component {
               configurable
               id={currentFieldId}
               text={text}
+              onCopyField={() => this.onCopyFormElement(currentFieldId)}
               onDeleteField={() => this.onDeleteFormElement(currentFieldId)}
-              onEditField={() => this.onClickEditField(currentFieldId, currentFieldType)}
+              onEditField={!nonEditableTypes.includes(currentFieldType) ? (() => this.onClickEditField(currentFieldId, currentFieldType)) : null}
             />
           </StyledFieldContainer>
         );

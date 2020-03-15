@@ -38,27 +38,33 @@ const StyledFieldControl = styled.div`
   background-color: #d5d5d5;
 `;
 
-const FieldControls = (props) => {
+const FieldControls = ({ onCopy, onDelete, onEdit }) => {
   const onClickHandlers = {
-    delete: props.onDelete,
-    edit: props.onEdit
+    copy: onCopy,
+    delete: onDelete,
+    edit: onEdit
   };
 
   return (
     <StyledFieldControl>
-      {controls.map(ctrl => (
-        <StyledControlContainer
-          key={ctrl.name}
-          onClick={onClickHandlers[ctrl.id] ? onClickHandlers[ctrl.id] :  () => {}}
-        >
-          <i className={'fas fa-' + ctrl.name} />
-        </StyledControlContainer>
-      ))}
+      {controls.map(ctrl => {
+        const shouldShowControl = !!onClickHandlers[ctrl.id] || ctrl.id === 'drag';
+        return shouldShowControl ? (
+          <StyledControlContainer
+            key={ctrl.name}
+            onClick={onClickHandlers[ctrl.id]}
+          >
+            <i className={'fas fa-' + ctrl.name} />
+          </StyledControlContainer>
+        )
+        : null;
+      })}
     </StyledFieldControl>
   );
 }
 
 FieldControls.propTypes = {
+  onCopy: func,
   onDelete: func,
   onEdit: func
 };

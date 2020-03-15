@@ -25,6 +25,7 @@ const FileUploader = ({
   configurable,
   label,
   onChange,
+  onCopyField,
   onDeleteField,
   onEditField,
   value
@@ -40,7 +41,7 @@ const FileUploader = ({
         <input type="file" value={value} onChange={onChange} disabled={configurable} />
         {configurable && (
           <StyledFieldControlsContainer>
-            <FieldControls onEdit={onEditField} onDelete={onDeleteField} />
+            <FieldControls onCopy={onCopyField} onEdit={onEditField} onDelete={onDeleteField} />
           </StyledFieldControlsContainer>
         )}
       </StyledFileContainer>
@@ -51,7 +52,9 @@ const FileUploader = ({
 FileUploader.propTypes = {
   configurable: bool,
   label: string,
+  onCopyField: func,
   onDeleteField: func,
+  onEditField: func,
   value: string
 };
 

@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import GridLayout, { WidthProvider } from 'react-grid-layout';
-import { number, shape, string } from 'prop-types';
+import { number, shape, string, func } from 'prop-types';
 
-import { saveForm } from '../../actions/forms';
+import { changePage } from '../../actions/page';
 
 import IconButton from '../core/buttons/icon-button';
 import Input from '../core/input/index';
@@ -32,6 +32,7 @@ const StyledDataBox = styled.pre`
   height: 40%;
   border: 1px solid black;
   border-radius: 4px;
+  overflow: auto;
 `;
 
 const GridContainer = styled.div`
@@ -48,8 +49,10 @@ const StyledFieldCenteredContentContainer = styled.div`
 `;
 
 const StyledButtonContainer = styled.div`
+  display: flex;
+  justify-content: center;
   margin: 0 auto;
-  width: 120px;
+  width: 400px;
 `;
 
 const Fields = {
@@ -86,6 +89,10 @@ class PreviewForm extends Component {
 
   onSubmitForm = () => {
     this.setState({ shouldSubmit: true });
+  }
+
+  goToFormList = () => {
+    this.props.changePage('list');
   }
 
   getSubmitData = () => {
@@ -165,6 +172,13 @@ class PreviewForm extends Component {
             >
               Submit
             </IconButton>
+            <IconButton
+              visualType="primary"
+              iconClass="list-ul"
+              onClick={this.goToFormList}
+            >
+              Go To Form List
+            </IconButton>
           </StyledButtonContainer>
         </GridContainer>
         <Sidebar>
@@ -200,17 +214,18 @@ PreviewForm.propTypes = {
     fields: shape({
       string: formFieldPropTypes,
     }).isRequired
-  }).isRequired
+  }).isRequired,
+  changePage: func.isRequired
 }
 
 const mapStateToProps = (state) => {
   return {
-    form: state.forms[state.forms.currentFormId]
+    form: state.formData.forms[state.formData.currentFormId]
   };
 };
 
 const mapDispatchToProps = {
-  saveForm
+  changePage
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(PreviewForm);

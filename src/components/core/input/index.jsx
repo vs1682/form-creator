@@ -35,6 +35,7 @@ const Input = (props) => {
     configurable,
     label,
     onChange,
+    onCopyField,
     onDeleteField,
     onEditField,
     value
@@ -51,7 +52,7 @@ const Input = (props) => {
         <StyledInput value={value} disabled={configurable} onChange={onChange} />
         {configurable && (
           <StyledFieldControlsContainer>
-            <FieldControls onEdit={onEditField} onDelete={onDeleteField} />
+            <FieldControls onCopy={onCopyField} onEdit={onEditField} onDelete={onDeleteField} />
           </StyledFieldControlsContainer>
         )}
       </StyledInputContainer>
@@ -63,6 +64,7 @@ Input.propTypes = {
   configurable: bool,
   label: string,
   onChange: func,
+  onCopyField: func,
   onDeleteField: func,
   onEditField: func,
   value: string
